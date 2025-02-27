@@ -48,5 +48,12 @@ every other things are given, which I have not had a issue compiling it.
 
 
 p4
+What I did: 
+Basically I started by reading the input image using the ReadImage fuction giving by the Image class, and at the end I did the same thing
+but with the WriteImage function provided in the Image class.
+Basically I am declaring all the variables such as the ceneter, area, roundeness, theta, emin, and more in a struct named items because
+we want to compare the object data modelbase with the items from the labelImage input
+
+Isuues: 
 
  ...

@@ -7,6 +7,16 @@
 #include "image.h"
 using namespace ComputerVisionProjects;
 
+struct items{
+  int label;
+  double xCenter;
+  double yCenter;
+  double e_min;
+  int area;
+  double roundness;
+  double theta1_degrees;
+};
+
 int main(int argc, char **argv){
   if (argc!=4) {
     std::cout << "Usage: " <<
@@ -27,6 +37,13 @@ int main(int argc, char **argv){
     return 1;
   }
 
+
+  for(int row =0; row < inputImage.num_rows(); row++){
+    for(int column =0; column < inputImage.num_columns(); column++){
+
+    }
+  }
+  
 
 
   //writing the image to the output

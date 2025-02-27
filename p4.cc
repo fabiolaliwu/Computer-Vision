@@ -19,6 +19,28 @@ int main(int argc, char **argv){
 
   std::cout << "Running p4 " << input_file << " " 
             << input_object_descriptions << " " << output_file << std::endl;
+  
+  Image inputImage;
+  if(ReadImage(input_file, &inputImage) == 0){
+    std::cout << "Invalid Image. " << std::endl;
+    return 1;
+  }
+
+
+
+  //writing the image to the output
+  if(!WriteImage(output_file, inputImage)){
+    std::cout << "Could not write " << std::endl;
+    return 1;
+  }
 
   return 0;
 }
+
+
+
+
+
+
+
+

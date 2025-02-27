@@ -23,7 +23,7 @@ int main(int argc, char **argv){
   std::cout << "Running p3 " << input_file << " " 
             << output_object_descriptions << " " << output_file << std::endl;
 
-  // reading input image in to convertedImage
+  // reading input image in to labeledImage
   Image labeledImage;
   if(ReadImage(input_file, &labeledImage) == 0){
     std::cout << "Invalid Image. " << std::endl;

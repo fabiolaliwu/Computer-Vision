@@ -1,5 +1,5 @@
 // Program 4 - HW3
-// Author: <YOUR NAME>
+// Author: Fabiola Li Wu
 
 #include <iostream>
 #include <string>

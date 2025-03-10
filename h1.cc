@@ -46,7 +46,10 @@ int main(int argc, char **argv){
             }
         }
         int mag = (int)(std::sqrt(pow(x,2) + pow(y,2)));
-        outputImage.SetPixel(r, c, mag);
+        if(mag > 255)
+          outputImage.SetPixel(r, c, 255);
+        else
+          outputImage.SetPixel(r, c, mag);
       }
     }
     //writing the image to the output

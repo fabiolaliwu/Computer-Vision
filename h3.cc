@@ -4,7 +4,8 @@
 #include "image.h"
 #include <iostream>
 #include <string>
-
+#include <cmath>
+#include <fstream>
 using namespace ComputerVisionProjects;
 
 int main(int argc, char **argv){
@@ -18,5 +19,29 @@ int main(int argc, char **argv){
     const std::string output_txt_filenm(argv[3]);
 
     std::cout << "Running h3: " << input_filenm << " " << output_pgm_filenm << " " << output_txt_filenm << std::endl;
+    // reading input image in to convertedImage
+    Image inputImage, outputImage;
+    if(ReadImage(input_filenm, &inputImage) == 0){
+      std::cout << "Invalid Image. " << std::endl;
+      return 1;
+    }
+
+    int p = std::sqrt(pow(inputImage.num_columns(), 2) + pow(inputImage.num_rows(), 2));
+    int numP = p;
+    int theta = 180;
+    std::vector<std::vector<int>> accumulator(theta, std::vector<int>(p, 0));
+    for(int row = 0; row < inputImage.num_rows(); row ++){
+        for(int column = 0; column < inputImage.num_columns(); column++){
+            
+        }
+    }
+
+    //writing the image to the output
+    if(!WriteImage(output_pgm_filenm, outputImage)){
+      std::cout << "Could not write " << std::endl;
+      return 1;
+    }
+
+   
     return 0;
 }

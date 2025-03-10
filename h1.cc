@@ -27,33 +27,30 @@ int main(int argc, char **argv){
       std::cout << "Invalid Image. " << std::endl;
       return 1;
     }
-
+    Image outputImage = inputImage;
     const std::vector<const std::vector<int>> gradientX = {{-1, 0, 1},
                                               {-2, 0, 2},
                                               {-1, 0, 1}};
     const std::vector<const std::vector<int>> gradientY = {{1, 2, 1},
                                               {0, 0, 0},
                                               {-1, -2, -1}};
-    
     for(int r = 1; r < inputImage.num_rows() - 1; r++){
-      for(int c =1; c < inputImage.num_columns() - 1; c++){
+      for(int c = 1; c < inputImage.num_columns() - 1; c++){
         int x = 0, y = 0;
         // Sobel filter
         for (int j = -1; j <= 1; ++j) {
             for (int i = -1; i <= 1; ++i) {
-                int pixel = inputImage.GetPixel(c + i, r + j);
+                int pixel = inputImage.GetPixel(r + i, c + j);
                 x += (pixel * gradientX[j + 1][i + 1]);
                 y += (pixel * gradientY[j + 1][i + 1]);
             }
         }
         int mag = (int)(std::sqrt(pow(x,2) + pow(y,2)));
-        inputImage.SetPixel(x, y, mag);
+        outputImage.SetPixel(r, c, mag);
       }
     }
-    
-  
     //writing the image to the output
-    if(!WriteImage(output_file, inputImage)){
+    if(!WriteImage(output_file, outputImage)){
       std::cout << "Could not write " << std::endl;
       return 1;
     }

@@ -6,6 +6,7 @@
 #include <fstream>
 #include "image.h"
 #include "DisjSets.h"
+#include <cmath>
 using namespace ComputerVisionProjects;
 
 int main(int argc, char **argv){
@@ -64,7 +65,23 @@ int main(int argc, char **argv){
                 accumulator[row][column] > threshold) {
                 double theta = (column * M_PI) / 180.0;
                 double rho = row;
-                
+                double x = outputImage.num_columns() - 1;
+                double y = outputImage.num_rows() - 1;
+                std::vector<std::pair<int, int>> validPairs;
+                pair<double, double> first = {0, rho/std::sin(theta)};
+                if(rho/std::sin(theta) > y)
+                  validPairs.push_back(first);
+                pair<double, double> second = {(rho/std::cos(theta)), 0};
+                if((rho/std::cos(theta)) > x)
+                  validPairs.push_back(second);
+                pair<double, double> third = {x, (rho - x * std::cos(theta))/std::sin(theta)};
+                if((rho - x * std::cos(theta))/std::sin(theta) > y)
+                  validPairs.push_back(third);
+                pair<double, double> fourth = {(rho - y * std::sin(theta))/std::cos(theta), y};
+                if((rho - y * std::sin(theta))/std::cos(theta) > x)
+                  validPairs.push_back(fourth);
+                if(validPairs.size() >= 2)
+                  DrawLine(validPairs[0].first, validPairs[0].second, validPairs[1].first, validPairs[1].second, 130, &outputImage);
                 
             }
         }

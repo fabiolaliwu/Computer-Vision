@@ -62,7 +62,6 @@ int main(int argc, char **argv) {
     for(int row = 0; row < accumulator.size(); row ++){
         for(int column = 0; column < accumulator[0].size(); column++)
             outFile << accumulator[row][column] << " ";
-        outFile << std::endl;
     }
     outFile.close();
     if (!WriteImage(output_pgm_filenm, outputImage)) {

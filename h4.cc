@@ -36,58 +36,74 @@ int main(int argc, char **argv){
       std::cout << "File does not exist."<< std::endl;
       return 1;
     }
-    int rhoRes, thetaRes;
-    inputVector >> rhoRes >> thetaRes;
+    
+    //inputVector >> rhoRes >> thetaRes;
     //std::cout << "rhoRes: " << rhoRes << ", thetaRes: " << thetaRes << std::endl;
+    int thetaRes = 180;
+    int rhoRes = (int)std::sqrt(pow(inputImage.num_rows(), 2) + pow(inputImage.num_columns(), 2));
 
-    std::vector<std::vector<int>> accumulator(rhoRes, std::vector<int>(thetaRes, 0));
+
+    std::vector<std::vector<int>> accumulator(thetaRes, std::vector<int>(rhoRes, 0));
+    //std::cout << accumulator.size() << " " << accumulator[0].size();
     for(int row = 0; row < accumulator.size(); row ++){
-      for(int column = 0; column < accumulator[0].size(); column++)
+      for(int column = 0; column < accumulator[0].size(); column++){
+        
         inputVector >> accumulator[row][column];
+        //std::cout << "Checking accumulator[" << row << "][" << column << "]: " << accumulator[row][column] << std::endl;
+
+        //std::cout << accumulator[row][column] << " ";
+      }
+      //  std::cout << std::endl;
     }
     inputVector.close();
 
     //std::cout << "Ran until here? " << std::endl;
     Image outputImage = inputImage; 
-    outputImage.AllocateSpaceAndSetSize(inputImage.num_rows(), inputImage.num_columns());
-    // std::cout << "Row:  " << outputImage.num_rows() << " Column: " << outputImage.num_columns() << std::endl;
-    outputImage.SetNumberGrayLevels(255);
-    for (int row = 1; row < rhoRes - 1; row++) { 
-      for (int column = 1; column < thetaRes - 1; column++) { 
-        if (accumulator[row][column] > accumulator[row-1][column] &&
-            accumulator[row][column] > accumulator[row-1][column-1] &&
-            accumulator[row][column] > accumulator[row-1][column+1] &&
-            accumulator[row][column] > accumulator[row+1][column+1] &&
-            accumulator[row][column] > accumulator[row][column+1] &&
-            accumulator[row][column] > accumulator[row+1][column] &&
-            accumulator[row][column] > accumulator[row+1][column-1] &&
-            accumulator[row][column] > accumulator[row][column-1] &&
-            accumulator[row][column] > threshold) {
-            double theta = (column * M_PI) / 180.0;
-            int rho = row;
-            int x = outputImage.num_columns() - 1;
-            int y = outputImage.num_rows() - 1;
+    //outputImage.AllocateSpaceAndSetSize(inputImage.num_rows(), inputImage.num_columns());
+    std::cout << "Image Row:  " << outputImage.num_rows() << " Image Column: " << outputImage.num_columns() << std::endl;
+    //outputImage.SetNumberGrayLevels(255);
+    //std::cout << "running here?" <<std::endl;
+    //std::cout << "Checking accumulator[" << accumulator.size() << "][" << accumulator[0].size() << "]: " << accumulator[row][column] << std::endl;
 
-            std::vector<std::pair<int, int>> validPairs;
-            pair<int, int> first = {0, round(rho / std::sin(theta))};
-            if (round(rho / std::sin(theta)) > y)
-                validPairs.push_back(first);
 
-            pair<int, int> second = {round(rho / std::cos(theta)), 0};
-            if (round(rho / std::cos(theta)) > x)
-                validPairs.push_back(second);
+    for (int row = 1; row < thetaRes - 1; row++) { 
+      for (int column = 1; column < rhoRes - 1; column++) { 
+        //std::cout << "running here?" <<std::endl;
+        if (accumulator[row][column] > threshold &&
+              accumulator[row][column] > accumulator[row-1][column] &&  
+              accumulator[row][column] > accumulator[row+1][column] &&  
+              accumulator[row][column] > accumulator[row][column-1] &&  
+              accumulator[row][column] > accumulator[row][column+1] &&  
+              accumulator[row][column] > accumulator[row-1][column-1] && 
+              accumulator[row][column] > accumulator[row-1][column+1] && 
+              accumulator[row][column] > accumulator[row+1][column-1] && 
+              accumulator[row][column] > accumulator[row+1][column+1]) {
+              double theta = (row * M_PI) / 180.0;
+              int rho = column;
+              int x = outputImage.num_rows() - 1;
+              int y = outputImage.num_columns() - 1;
 
-            pair<int, int> third = {x, round((rho - x * std::cos(theta)) / std::sin(theta))};
-            if (round((rho - x * std::cos(theta)) / std::sin(theta)) > y)
-                validPairs.push_back(third);
+              std::vector<std::pair<int, int>> validPairs;
+              pair<int, int> first = {0, std::lround(rho / std::sin(theta))};
+              if (first.second <= y && first.second >= 0)
+                  validPairs.push_back(first);
 
-            pair<int, int> fourth = {round((rho - y * std::sin(theta)) / std::cos(theta)), y};
-            if (round((rho - y * std::sin(theta)) / std::cos(theta)) > x)
-                validPairs.push_back(fourth);
+              pair<int, int> second = {std::lround(rho / std::cos(theta)), 0};
+              if ((second.first <= x) && second.first >= 0)
+                  validPairs.push_back(second);
 
-            if (validPairs.size() >= 2)
+              pair<int, int> third = {x, std::lround((rho - x * std::cos(theta)) / std::sin(theta))};
+              if ((third.second <= y) && (third.second >= 0))
+                  validPairs.push_back(third);
+
+              pair<int, int> fourth = {std::lround((rho - y * std::sin(theta)) / std::cos(theta)), y};
+              if ((fourth.first <= x) && (fourth.first >= 0))
+                  validPairs.push_back(fourth);
+
+              if (validPairs.size() >= 2){                
+                //std::cout << validPairs[0].first << " " << validPairs[0].second << " " << validPairs[1].first << " "<< validPairs[1].second << std::endl;
                 DrawLine(validPairs[0].first, validPairs[0].second, validPairs[1].first, validPairs[1].second, 100, &outputImage);
-            
+              }
             }
         }
     }

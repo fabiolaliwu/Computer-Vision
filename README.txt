@@ -43,6 +43,23 @@ of voting array.
 3. Declare thetaRes as 180 because it goes form 0 to pi, but we know that pi is 180 degrees.
 4. Declare an accumulator which will store the votes of rho and theta.
 5. It iterates through the image and voting. It checks if the pixel is not 0, if is non-zero 
-pixel, then it calculates the theta and rho, and go through 0-rhoRes in order to set it to 
+pixel, then it calculates the theta and rho, and go through 0-rhoRes in order to increment 
 the accumulator.
+6. Declare an outputImage, and allocates the size for the new image and set gray levels.
+7. iterates through the outputImage and setPixel with the value in accumulator.
+8. Opens that output file for the array and starting puttinhg the values from the array to
+the file.
+9. closes the file.
+ISSUES: 
+1. I was setting rho for rows and theta for columns, so the image was upsidedown for me.
+2. I was setting it backwards(rightway), but I forgot to do it for the outputImage, so it 
+was giving me a black image.
+
+h4.cc:
+It gets the original image as inputu, the votingArray.txt file, a threshold, and it outputs
+a lineImage.pgm image.
+1. Declares an Image object inputImage, and get teh image from the input image.
+2. Get the voting form the file into the accumulator.
+3. It creates another Image object called outputImage to draw the lines.
+4. Goes through the 
 

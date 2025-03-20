@@ -60,7 +60,7 @@ int main(int argc, char **argv){
     //std::cout << "Ran until here? " << std::endl;
     Image outputImage = inputImage; 
     //outputImage.AllocateSpaceAndSetSize(inputImage.num_rows(), inputImage.num_columns());
-    std::cout << "Image Row:  " << outputImage.num_rows() << " Image Column: " << outputImage.num_columns() << std::endl;
+    //std::cout << "Image Row:  " << outputImage.num_rows() << " Image Column: " << outputImage.num_columns() << std::endl;
     //outputImage.SetNumberGrayLevels(255);
     //std::cout << "running here?" <<std::endl;
     //std::cout << "Checking accumulator[" << accumulator.size() << "][" << accumulator[0].size() << "]: " << accumulator[row][column] << std::endl;

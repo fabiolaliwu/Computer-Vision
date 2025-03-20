@@ -61,5 +61,14 @@ a lineImage.pgm image.
 1. Declares an Image object inputImage, and get teh image from the input image.
 2. Get the voting form the file into the accumulator.
 3. It creates another Image object called outputImage to draw the lines.
-4. Goes through the 
+4. Goes through the accumulator and check if the pixel/item is greater than the threshold 
+and all the pixels around it, if so, the find a pair that is valid/within the range and 
+greater than zero. 
+5. if there are two valid points, then draw a line with grey color 100 to the output image.
+6. Write the outputImage to the output_line_filem.
+ISSUES:
+1. I was mixing up the rho, theta with the rows and columns, so I was inconsistent and
+everything was messed up and I got a lot of abort error and segmentation error.
+2. I forgot to set theta to be 180, and rho to be calculated with the image, so the program 
+was not working as it should be.
 

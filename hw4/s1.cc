@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
       }
     }
 
-    // calculate teh centroid
+    // calculate the centroid
     int sumx = 0, sumy = 0, area = 0;
     for(int r = 0; r < binaryImage.num_rows(); r++){
       for(int c = 0; c < binaryImage.num_columns(); c++){

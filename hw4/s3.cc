@@ -1,5 +1,5 @@
 // Program 3 - HW4
-// Author: <YOUR NAME>
+// Author: <Fabiola Li Wu>
 
 #include "image.h"
 #include <string>

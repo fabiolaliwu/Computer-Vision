@@ -8,6 +8,27 @@
 
 using namespace ComputerVisionProjects;
 
+std::vector<double> lightDirection(Image &sphere, int circlex, int circley, int circleRadius) {
+  // find brightest pixel in the circle
+  int maxPixel = 0, maxRow = 0, maxCol = 0;
+  for(int row = 0; row < sphere.num_rows(); row++){
+    for(int col = 0; col <sphere.num_columns(); col++){
+      if(sphere.GetPixel(row, col) > maxPixel){
+        int dist = (int)(std::sqrt(pow((circlex - row),2) + pow((circley - col),2)));
+        if(dist < circleRadius){
+          maxPixel = sphere.GetPixel(row, col);
+          maxRow = row;
+          maxCol = col;
+        }
+      }
+    }
+  }
+  double x = (double)(maxRow - circlex);
+  double y = (double)(maxCol - circley);
+  double z = std::sqrt(circleRadius * circleRadius - x * x - y * y);
+  return {x, y, z};
+}
+
 int main(int argc, char **argv) {
     if (argc != 6) {
       std::cout << "Usage: " << argv[0] <<
@@ -49,14 +70,20 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    
-    
+    std::vector<std::vector<double>> lightDirections;
+    lightDirections.push_back(lightDirection(sphere1, circlex, circley, circleRadius));
+    lightDirections.push_back(lightDirection(sphere2, circlex, circley, circleRadius));
+    lightDirections.push_back(lightDirection(sphere3, circlex, circley, circleRadius));
 
-
-
-
-   
-
+    // write the output
+    std::ofstream outputFile(output_directions_file);
+    if (!outputFile.is_open()) {
+        std::cerr << "Error opening output file: " << output_directions_file << std::endl;
+        return 1;
+    }
+    for (auto x : lightDirections)
+        outputFile << x[0] << " " << x[1] << " " << x[2] << std::endl;
+    outputFile.close();
     std::cout << "Running s2 " << parameters_file << " " << sphere_image1 << " " << sphere_image2
               << " " << sphere_image3 << " " << output_directions_file << std::endl;
     return 0;

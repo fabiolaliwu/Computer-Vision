@@ -22,17 +22,19 @@ int main(int argc, char **argv) {
     const std::string sphere_image3(argv[4]);
     const std::string output_directions_file(argv[5]);
 
-    // Read the parameters file
-    std::ifstream parameters_stream(parameters_file);
-    if (!parameters_stream) {
+    // Read the parameters
+    int circlex, circley, circleRadius;
+    std::ifstream param_file(parameters_file);
+    if (param_file.is_open()) {
+        param_file >> circlex >> circley >> circleRadius;
+        param_file.close();
+    } else {
         std::cerr << "Error opening parameters file: " << parameters_file << std::endl;
         return 1;
     }
-    std::string line;
-    std::getline(parameters_stream, line);
-    parameters_stream.close();
+    param_file.close();
 
-    // Read the sphere images
+    // read circle images
     Image sphere1, sphere2, sphere3;
     if (ReadImage(sphere_image1, &sphere1) == 0) {
         std::cerr << "Error reading sphere image 1: " << sphere_image1 << std::endl;
@@ -46,6 +48,13 @@ int main(int argc, char **argv) {
         std::cerr << "Error reading sphere image 3: " << sphere_image3 << std::endl;
         return 1;
     }
+
+    
+    
+
+
+
+
    
 
     std::cout << "Running s2 " << parameters_file << " " << sphere_image1 << " " << sphere_image2

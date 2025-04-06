@@ -4,6 +4,7 @@
 #include "image.h"
 #include <string>
 #include <iostream>
+#include <fstream>
 
 using namespace ComputerVisionProjects;
 
@@ -20,6 +21,32 @@ int main(int argc, char **argv) {
     const std::string sphere_image2(argv[3]);
     const std::string sphere_image3(argv[4]);
     const std::string output_directions_file(argv[5]);
+
+    // Read the parameters file
+    std::ifstream parameters_stream(parameters_file);
+    if (!parameters_stream) {
+        std::cerr << "Error opening parameters file: " << parameters_file << std::endl;
+        return 1;
+    }
+    std::string line;
+    std::getline(parameters_stream, line);
+    parameters_stream.close();
+
+    // Read the sphere images
+    Image sphere1, sphere2, sphere3;
+    if (ReadImage(sphere_image1, &sphere1) == 0) {
+        std::cerr << "Error reading sphere image 1: " << sphere_image1 << std::endl;
+        return 1;
+    }
+    if (ReadImage(sphere_image2, &sphere2) == 0) {
+        std::cerr << "Error reading sphere image 2: " << sphere_image2 << std::endl;
+        return 1;
+    }
+    if (ReadImage(sphere_image3, &sphere3) == 0) {
+        std::cerr << "Error reading sphere image 3: " << sphere_image3 << std::endl;
+        return 1;
+    }
+   
 
     std::cout << "Running s2 " << parameters_file << " " << sphere_image1 << " " << sphere_image2
               << " " << sphere_image3 << " " << output_directions_file << std::endl;

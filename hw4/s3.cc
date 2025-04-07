@@ -55,6 +55,23 @@ int main(int argc, char **argv) {
   //   std::cout << std::endl;
   // }
 
+    // calculate normals and albedo
+    Image normals =image1, albedo = image1;
+    // allocate space for normals and albedo
+    for(int r = 0; r < image1.num_rows(); r++){
+        for(int c = 0; c < image1.num_columns(); c++){
+            
+        }
+    }
+    // write the output
+    if(!WriteImage(normals_output_file, normals)){
+        std::cerr << "Error writing normals image: " << normals_output_file << std::endl;
+        return 1;
+    }
+    if(!WriteImage(albedo_output_file, albedo)){
+        std::cerr << "Error writing albedo image: " << albedo_output_file << std::endl;
+        return 1;
+    }
    
 
 

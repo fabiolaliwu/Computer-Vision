@@ -14,19 +14,18 @@ std::vector<double> lightDirection(Image &sphere, int circlex, int circley, int 
   for(int row = 0; row < sphere.num_rows(); row++){
     for(int col = 0; col <sphere.num_columns(); col++){
       if(sphere.GetPixel(row, col) > maxPixel){
-        int dist = (int)(std::sqrt(pow((circlex - row),2) + pow((circley - col),2)));
-        if(dist < circleRadius){
           maxPixel = sphere.GetPixel(row, col);
           maxRow = row;
           maxCol = col;
-        }
       }
     }
   }
   double x = (double)(maxRow - circlex);
+  std::cout << circlex  << std::endl;
   double y = (double)(maxCol - circley);
   double z = std::sqrt(circleRadius * circleRadius - x * x - y * y);
-  return {x, y, z};
+  double length = std::sqrt(x * x + y * y + z * z);
+  return {maxPixel*x/length, maxPixel*y/length, maxPixel*z/length};
 }
 
 int main(int argc, char **argv) {

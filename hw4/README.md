@@ -23,7 +23,7 @@ What I did:
 - get the parameters and place them in a variable.
 - declare a vector of double vector calles lightDirections in order to store them.
 - call a helper function called lightDirection in order to find the brightest pixel and find x by getting the difference of x brightest and x from the center, same for y, and for z, I used the formula provided in class which is to get the square root of the radius of the circle squared minus x squared minus y squared. 
-- push back the vector of values x, y, z to the lightDirections vector.
+- push back the vector of values maxPixel times x divided by the length, maxPixel times y divided by the length, maxPixel times z divided by the length to the lightDirections vector.
 - Write the results to the output file.
 
 

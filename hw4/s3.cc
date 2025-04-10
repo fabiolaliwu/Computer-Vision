@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
             if(image1.GetPixel(r, c) > threshold && image2.GetPixel(r, c) > threshold && image3.GetPixel(r, c) > threshold){
                 double i1 = image1.GetPixel(r, c), i2 = image2.GetPixel(r, c), i3 = image3.GetPixel(r, c);
                 std::vector<double> I = {i1, i2, i3}, N(3, 0.0), n(3, 0.0);
-                
+
                 // inverse S * I = N
                 for(int i = 0; i < 3; i++){
                     for(int j = 0; j < 3; j++)
@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
                         n[i] = N[i]/rho;
 
                     // calculate the end points
-                    int end_r = (int)(r + 6 + n[0]), end_c = (int)(c + 6 + n[1]);
+                    int end_r = (int)(r + 8 * n[1]), end_c = (int)(c + 8 * n[0]);
                     end_r = std::min<int>(std::max(end_r, 0), image1.num_rows() - 1);
                     end_c = std::min<int>(std::max(end_c, 0), image1.num_columns() - 1);
 

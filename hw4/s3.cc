@@ -93,7 +93,6 @@ int main(int argc, char **argv) {
     Image normals =image1, albedo = image1;
     for(int r = 0; r < normals.num_rows(); r++){
         for(int c = 0; c < normals.num_columns(); c++){
-    
             albedo.SetPixel(r, c, 0);
         }
     }
@@ -110,24 +109,31 @@ int main(int argc, char **argv) {
                 }
                 // |N| or rho
                 double rho = sqrt(N[0]*N[0] + N[1]*N[1] + N[2]*N[2]);
-                albedo.SetPixel(r, c, rho*70);
+                albedo.SetPixel(r, c, rho*98);
                 //std::cout << "rho: " << rho << std::endl;
                 if(r%step ==0 && c%step == 0){
-                    //n
+                    //n = N/rho
                     for(int i = 0; i < 3; i++)
                         n[i] = N[i]/rho;
 
-    
-                    int end_r = (int)(r + 5 + n[0]), end_c = (int)(c + 5 + n[1]);
+                    // calculate the end points
+                    int end_r = (int)(r + 6 + n[0]), end_c = (int)(c + 6 + n[1]);
                     end_r = std::min<int>(std::max(end_r, 0), image1.num_rows() - 1);
                     end_c = std::min<int>(std::max(end_c, 0), image1.num_columns() - 1);
-                    
-                    
+
+                    // draw the line and set the pixels
                     DrawLine(r, c, end_r, end_c, 250, &normals);
+                    normals.SetPixel(r-1, c, 255);
+                    normals.SetPixel(r+1, c, 255);
+                    normals.SetPixel(r, c-1, 255);
+                    normals.SetPixel(r, c+1, 255);
                     normals.SetPixel(r, c, 0);
                 }
+            
+        
 
-                
+
+              
                 
             }
         }

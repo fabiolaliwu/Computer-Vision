@@ -29,3 +29,8 @@ What I did:
 
 s3:
 
+
+Issues:
+- I was using a very low step that was making my image look almost all white, so finally I set it to 10
+- making the threshold higher, will make the image look darker, and making it it lower will make the albedo image look brighter.
+Finally decided to have the threshold to be 84 to look exactly the same as the example output.

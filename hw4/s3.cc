@@ -129,20 +129,9 @@ int main(int argc, char **argv) {
                     normals.SetPixel(r, c+1, 255);
                     normals.SetPixel(r, c, 0);
                 }
-            
-        
-
-
-              
-                
             }
         }
     }
-
-
-
-
-
     // write the output
     if(!WriteImage(normals_output_file, normals)){
         std::cerr << "Error writing normals image: " << normals_output_file << std::endl;
@@ -152,9 +141,6 @@ int main(int argc, char **argv) {
         std::cerr << "Error writing albedo image: " << albedo_output_file << std::endl;
         return 1;
     }
-    
-
-
     std::cout << "Running s3: " << directions_file << " " << image1_file <<  " " << image2_file << " " << image3_file
               << " " << step << " " << threshold << " " << normals_output_file << " "
               <<  " " << albedo_output_file << std::endl;

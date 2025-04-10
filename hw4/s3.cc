@@ -102,11 +102,13 @@ int main(int argc, char **argv) {
             if(image1.GetPixel(r, c) > threshold && image2.GetPixel(r, c) > threshold && image3.GetPixel(r, c) > threshold){
                 double i1 = image1.GetPixel(r, c), i2 = image2.GetPixel(r, c), i3 = image3.GetPixel(r, c);
                 std::vector<double> I = {i1, i2, i3}, N(3, 0.0), n(3, 0.0);
+                
                 // inverse S * I = N
                 for(int i = 0; i < 3; i++){
                     for(int j = 0; j < 3; j++)
                         N[i] += inverted[i][j] * I[j];
                 }
+
                 // |N| or rho
                 double rho = sqrt(N[0]*N[0] + N[1]*N[1] + N[2]*N[2]);
                 albedo.SetPixel(r, c, rho*98);

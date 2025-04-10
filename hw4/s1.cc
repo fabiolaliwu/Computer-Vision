@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
       for(int c = 0; c < binaryImage.num_columns(); c++){
         int pixel = binaryImage.GetPixel(r, c);
         if(pixel == 255){
-          sumx += r;
-          sumy += c;
+          sumx += c;
+          sumy += r;
           area++;
         }
       }
@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
       for(int c = 0; c < binaryImage.num_columns(); c++){
         int pixel = binaryImage.GetPixel(r, c);
         if(pixel == 255){
-          int dist = (int)(std::sqrt(pow((centroidX - r),2) + pow((centroidY - c),2)));
+          int dist = (int)(std::sqrt(pow((centroidX - c),2) + pow((centroidY - r),2)));
           if(dist > radius)
             radius = dist;
         }

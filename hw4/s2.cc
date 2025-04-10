@@ -20,11 +20,15 @@ std::vector<double> lightDirection(Image &sphere, int circlex, int circley, int 
       }
     }
   }
-  double x = (double)(maxRow - circlex);
-  std::cout << circlex  << std::endl;
-  double y = (double)(maxCol - circley);
+  // std::cout << "maxPixel: " << maxPixel << std::endl
+  //           << "maxRow: " << maxRow << std::endl
+  //           << "maxCol: " << maxCol << std::endl << std::endl; 
+  double x = (double)(maxCol - circlex);
+  //std::cout << "x: " << x << std::endl;
+  double y = (double)(maxRow - circley);
   double z = std::sqrt(circleRadius * circleRadius - x * x - y * y);
   double length = std::sqrt(x * x + y * y + z * z);
+  //std::cout << "length: " << length << std::endl;
   return {maxPixel*x/length, maxPixel*y/length, maxPixel*z/length};
 }
 
@@ -77,11 +81,13 @@ int main(int argc, char **argv) {
     // write the output
     std::ofstream outputFile(output_directions_file);
     if (!outputFile.is_open()) {
-        std::cerr << "Error opening output file: " << output_directions_file << std::endl;
+        //std::cerr << "Error opening output file: " << output_directions_file << std::endl;
         return 1;
     }
-    for (auto x : lightDirections)
+    for (auto x : lightDirections){
+        std::cout << x[0] << " " << x[1] << " " << x[2] << std::endl;
         outputFile << x[0] << " " << x[1] << " " << x[2] << std::endl;
+    }
     outputFile.close();
     std::cout << "Running s2 " << parameters_file << " " << sphere_image1 << " " << sphere_image2
               << " " << sphere_image3 << " " << output_directions_file << std::endl;

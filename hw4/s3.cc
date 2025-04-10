@@ -5,6 +5,9 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <cmath>
+#include <vector>
+#include <algorithm>
 using namespace ComputerVisionProjects;
 
 int main(int argc, char **argv) {
@@ -35,7 +38,8 @@ int main(int argc, char **argv) {
         std::cerr << "Error opening directions file: " << directions_file << std::endl;
         return 1;
     }
-    std::vector<std::vector<double>> directions;
+    std::vector<std::vector<double>> S;
+    double matrix[3][3];
     while(directions_file_stream){
         std::vector<double> direction;
         double x, y, z;
@@ -45,7 +49,7 @@ int main(int argc, char **argv) {
         direction.push_back(x);
         direction.push_back(y);
         direction.push_back(z);
-        directions.push_back(direction);
+        S.push_back(direction);
     }
     directions_file_stream.close();
   // for(int r = 0; r < directions.size(); r++){
@@ -54,15 +58,85 @@ int main(int argc, char **argv) {
   //   }
   //   std::cout << std::endl;
   // }
+  // put the directions into a 3x3 matrix
+    for(int i = 0; i < S.size(); i++){
+        matrix[i][0] = S[i][0];
+        matrix[i][1] = S[i][1];
+        matrix[i][2] = S[i][2];
+        //std::cout << matrix[i][0] << " " << matrix[i][1] << " " << matrix[i][2] << std::endl;
+    }
 
-    // calculate normals and albedo
+    // invert matrix
+    double det = matrix[0][0] * (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) -
+                 matrix[0][1] * (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0]) +
+                 matrix[0][2] * (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]);
+    if (det == 0) {
+        std::cerr << "Ematrix not inverted" << std::endl;
+        return 1;
+    }
+    double inv_det = 1.0 / det;
+    double inverted[3][3];
+    inverted[0][0] = (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) * inv_det;
+    inverted[0][1] = (matrix[0][2] * matrix[2][1] - matrix[0][1] * matrix[2][2]) * inv_det;
+    inverted[0][2] = (matrix[0][1] * matrix[1][2] - matrix[0][2] * matrix[1][1]) * inv_det;
+    inverted[1][0] = (matrix[1][2] * matrix[2][0] - matrix[1][0] * matrix[2][2]) * inv_det;
+    inverted[1][1] = (matrix[0][0] * matrix[2][2] - matrix[0][2] * matrix[2][0]) * inv_det;
+    inverted[1][2] = (matrix[0][2] * matrix[1][0] - matrix[0][0] * matrix[1][2]) * inv_det;
+    inverted[2][0] = (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]) * inv_det;
+    inverted[2][1] = (matrix[0][1] * matrix[2][0] - matrix[0][0] * matrix[2][1]) * inv_det;
+    inverted[2][2] = (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]) * inv_det;
+    // std::cout << "det: " << det << std::endl;
+    // std::cout << "inverted: " << inverted[0][0] << " " << inverted[0][1] << " " << inverted[0][2] << std::endl;
+    // std::cout << "inverted: " << inverted[1][0] << " " << inverted[1][1] << " " << inverted[1][2] << std::endl;
+    // std::cout << "inverted: " << inverted[2][0] << " " << inverted[2][1] << " " << inverted[2][2] << std::endl;
+    
     Image normals =image1, albedo = image1;
-    // allocate space for normals and albedo
-    for(int r = 0; r < image1.num_rows(); r++){
-        for(int c = 0; c < image1.num_columns(); c++){
-            
+    for(int r = 0; r < normals.num_rows(); r++){
+        for(int c = 0; c < normals.num_columns(); c++){
+    
+            albedo.SetPixel(r, c, 0);
         }
     }
+   
+    for(int r = 0; r < image1.num_rows(); r++){
+        for(int c = 0; c < image1.num_columns(); c++){
+            if(image1.GetPixel(r, c) > threshold && image2.GetPixel(r, c) > threshold && image3.GetPixel(r, c) > threshold){
+                double i1 = image1.GetPixel(r, c), i2 = image2.GetPixel(r, c), i3 = image3.GetPixel(r, c);
+                std::vector<double> I = {i1, i2, i3}, N(3, 0.0), n(3, 0.0);
+                // inverse S * I = N
+                for(int i = 0; i < 3; i++){
+                    for(int j = 0; j < 3; j++)
+                        N[i] += inverted[i][j] * I[j];
+                }
+                // |N| or rho
+                double rho = sqrt(N[0]*N[0] + N[1]*N[1] + N[2]*N[2]);
+                albedo.SetPixel(r, c, rho*70);
+                //std::cout << "rho: " << rho << std::endl;
+                if(r%step ==0 && c%step == 0){
+                    //n
+                    for(int i = 0; i < 3; i++)
+                        n[i] = N[i]/rho;
+
+    
+                    int end_r = (int)(r + 5 + n[0]), end_c = (int)(c + 5 + n[1]);
+                    end_r = std::min<int>(std::max(end_r, 0), image1.num_rows() - 1);
+                    end_c = std::min<int>(std::max(end_c, 0), image1.num_columns() - 1);
+                    
+                    
+                    DrawLine(r, c, end_r, end_c, 250, &normals);
+                    normals.SetPixel(r, c, 0);
+                }
+
+                
+                
+            }
+        }
+    }
+
+
+
+
+
     // write the output
     if(!WriteImage(normals_output_file, normals)){
         std::cerr << "Error writing normals image: " << normals_output_file << std::endl;
@@ -72,7 +146,7 @@ int main(int argc, char **argv) {
         std::cerr << "Error writing albedo image: " << albedo_output_file << std::endl;
         return 1;
     }
-   
+    
 
 
     std::cout << "Running s3: " << directions_file << " " << image1_file <<  " " << image2_file << " " << image3_file

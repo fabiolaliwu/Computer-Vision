@@ -28,6 +28,8 @@ What I did:
 
 Isuues: 
 - I was confusing the x and the y because I was putting all the rows in x when they should be in y and I was putting all the columns in y when they should be in x.
+- I was mixing up the x and x again to set the normals.
+- I was summing the normal instead of multiplying it, so I was getting very small numbers.
 
 
 s3:
